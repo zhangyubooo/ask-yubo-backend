@@ -193,7 +193,7 @@ def chat():
         result = client.chat.completions.create(
             model=GROQ_MODEL,
             messages=messages,
-            temperature=0.7,
+            temperature=0.4,   # lower = sticks closer to the facts in persona.md
             max_completion_tokens=2048,
         )
     except groq.APIStatusError as exc:

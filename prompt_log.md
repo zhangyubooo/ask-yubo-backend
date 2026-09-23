@@ -56,6 +56,15 @@ Originally written in Chinese; translated here.
    deadline, we switched `app.py` to Groq (the backup chosen in step 2). The
    `/chat` request and response stayed the same, so the frontend didn't change.
 
+7. **First live test caught a made-up fact**
+   > *(screenshot of curl against the Render URL)*
+
+   The deployed backend answered correctly but added that my degree is "a
+   five-year program" — not in the persona, and wrong (2025–2029 is four
+   years). Fix: stated the degree length explicitly in `persona.md`, added a
+   rule against embellishing programs/projects, and lowered `temperature`
+   from 0.7 to 0.4 so the model sticks closer to the facts.
+
 ## Decisions I made / changed
 
 - Keep the frontend on GitHub Pages and the backend on Render (two origins,
