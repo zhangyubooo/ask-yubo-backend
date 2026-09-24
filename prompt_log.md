@@ -65,6 +65,27 @@ Originally written in Chinese; translated here.
    rule against embellishing programs/projects, and lowered `temperature`
    from 0.7 to 0.4 so the model sticks closer to the facts.
 
+8. **From a page section to a site-wide floating chat**
+   > "I don't want it on the About page. Make it a floating window available
+   > anywhere on the site: a chat bubble in the bottom-right corner that opens
+   > a chat panel on the right, styled like a text-message thread."
+
+   Claude rebuilt the frontend as a self-contained widget (`ask-yubo.js` +
+   `ask-yubo.css`) that each page includes with two lines, with SMS-style
+   bubbles, `sessionStorage` so the conversation follows the visitor between
+   pages, full-screen layout on phones, and keyboard/screen-reader support.
+   The backend didn't change.
+
+9. **UI feedback rounds**
+   > "Use this photo as my chat avatar, cropped to my head." →
+   > "Make it smaller so my neck / upper body shows." →
+   > "Round the corners of the panel on wide screens." →
+   > "Add a shadow under the panel so it looks like it's floating."
+
+   Kept on phones: square, shadow-free full-screen panel. The shadow is the
+   only one on the site — deliberately, since the chat is the only thing that
+   floats above the page.
+
 ## Decisions I made / changed
 
 - Keep the frontend on GitHub Pages and the backend on Render (two origins,

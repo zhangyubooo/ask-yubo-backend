@@ -3,14 +3,14 @@
 **15-113 HW4 — Backend + Frontend**
 Yubo Zhang · Carnegie Mellon University, School of Design
 
-A small Flask service that powers **Ask Yubo**, a chat box on my portfolio's
-About page. Visitors ask questions about me and my work, and an AI answers in
+A small Flask service that powers **Ask Yubo**, a floating chat widget on
+every page of my portfolio. Visitors ask questions about me and my work, and an AI answers in
 my voice, using only what is already published on the site.
 
 | | |
 |---|---|
 | Backend (Render) | `https://ask-yubo-backend.onrender.com` ← *fill in after deploy* |
-| Frontend | <https://zhangyubooo.github.io/about.html> |
+| Frontend | <https://zhangyubooo.github.io/> — the round button, bottom-right, on every page |
 | Frontend repo | <https://github.com/zhangyubooo/zhangyubooo.github.io> |
 | AI model | `openai/gpt-oss-20b` via the Groq API (free tier) |
 
@@ -72,22 +72,31 @@ Short JSON description of the service, so opening the base URL isn't a 404.
 
 ## How the frontend talks to the backend
 
-The chat box lives in `about.html` in my portfolio repo.
+The frontend is a self-contained widget in my portfolio repo —
+[`ask-yubo.js`](https://github.com/zhangyubooo/zhangyubooo.github.io/blob/main/ask-yubo.js)
+and `ask-yubo.css` — added to `index.html`, `about.html` and `play.html` with
+two lines each. The script builds a round chat button in the bottom-right
+corner; clicking it opens a text-message style panel on the right.
 
-1. **On page load** it calls `GET /health` without waiting for the result.
-   Render's free tier sleeps after ~15 minutes idle and the first request can
-   take up to a minute; this starts the wake-up while the visitor is still reading.
+1. **On page load** (and whenever the panel opens) it calls `GET /health`
+   without waiting for the result. Render's free tier sleeps after ~15 minutes
+   idle and the first request can take up to a minute; this starts the wake-up
+   early.
 2. **When the visitor sends a message** it calls `POST /chat` with
-   `{message, history}`, shows a "thinking…" state, and disables the send button.
-3. **On `200`** it appends `reply` to the conversation and adds both the
-   question and the reply to its `history` array for the next request.
-4. **On an error status** it shows the `error` text from the JSON in the chat.
-   If the request never gets a response (backend asleep or down) it shows a
-   "the server is waking up, try again in a moment" message.
+   `{message, history}`, shows a typing indicator, and disables the send button
+   until the answer arrives. After 6 seconds it adds a "waking up the server"
+   note.
+3. **On `200`** it adds `reply` as a bubble and appends both messages to its
+   `history` array for the next request.
+4. **On an error status** it fades the visitor's bubble and shows
+   "Not delivered — *the `error` text from the JSON*". The message is put back
+   in the input so it can be re-sent. If there is no response at all (backend
+   asleep or down, 70-second timeout) it says the server couldn't be reached.
 
 The backend is **stateless**: it stores no conversations. The browser keeps the
-history and sends it back each time, so there's no database, and nothing is lost
-when Render restarts.
+history — in `sessionStorage`, so the conversation follows the visitor from page
+to page within one tab — and sends it back each time. No database, and nothing
+is lost when Render restarts.
 
 ---
 
@@ -132,7 +141,7 @@ calls Render — so there is no URL to remember to switch back before pushing.
 
 ```bash
 cd ../zhangyubooo.github.io
-python3 -m http.server 8000        # → http://localhost:8000/about.html
+python3 -m http.server 8000        # → http://localhost:8000/ (chat button bottom-right)
 ```
 
 ## Deploying to Render
