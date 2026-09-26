@@ -9,8 +9,9 @@ my voice, using only what is already published on the site.
 
 | | |
 |---|---|
-| Backend (Render) | `https://ask-yubo-backend.onrender.com` ← *fill in after deploy* |
+| Backend (Render) | <https://ask-yubo-backend.onrender.com> (try `/health`) |
 | Frontend | <https://zhangyubooo.github.io/> — the round button, bottom-right, on every page |
+| Project page | <https://zhangyubooo.github.io/ask-yubo.html> — description, decisions, code links |
 | Frontend repo | <https://github.com/zhangyubooo/zhangyubooo.github.io> |
 | AI model | `openai/gpt-oss-20b` via the Groq API (free tier) |
 
