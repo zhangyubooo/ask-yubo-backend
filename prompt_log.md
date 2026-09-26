@@ -88,8 +88,52 @@ Originally written in Chinese; translated here.
 
 ## Decisions I made / changed
 
-- Keep the frontend on GitHub Pages and the backend on Render (two origins,
-  so CORS is required) rather than serving both from Render.
-- Persona lives in `persona.md`, not in code, so I can rewrite it in my own
-  words without touching Python.
-- *(add your own edits here as you make them)*
+Claude proposed options and explained the trade-offs; these are the calls I
+made, and why.
+
+**Scope**
+- **A chatbot, not a Forbes Crossing leaderboard.** A leaderboard needs a
+  database — the part past students said was hardest. A chatbot needs one
+  secret and no storage, so I could spend the time understanding how the
+  frontend and backend actually talk. The leaderboard is saved for Project 2.
+- **Two repos, two hosts.** Frontend stays on GitHub Pages, backend on Render.
+  It means dealing with CORS, but it keeps a clear boundary between the two
+  halves, which is the point of the assignment.
+- **Persona in its own file (`persona.md`)**, not inside Python, so I can
+  rewrite how "I" sound without touching code.
+
+**Platforms**
+- **Free API only, no credit card.** I started with Google Gemini.
+- **Switching to Groq instead of fighting Google.** Gemini worked once, then
+  Google blocked my new project with a 403 that no code change could fix.
+  Rather than wait on an account review before the deadline, I switched the
+  AI call to Groq. Because the frontend only knows `{message, history}` in and
+  `{reply}` out, the frontend didn't change at all.
+- **The API key never expires.** The chat is meant to stay on my portfolio, and
+  an expiring key would break it silently. The risk is low: there is no
+  payment method on the account, and I can revoke the key any time.
+
+**Order of work**
+- **Deploy first, polish later — twice.** First I got the plain version
+  working end to end (local → Render → live site) before touching the design,
+  because the platforms were the risky part. Later, after two rounds of UI
+  changes, I pushed again and left the remaining details for later instead of
+  holding everything back until it was perfect.
+- **Testing the live version found a real bug.** The deployed bot said my
+  degree was "a five-year program". I kept the fix small and specific:
+  state the real fact, forbid embellishing, lower the temperature.
+
+**Design**
+- **A floating chat on every page, not a section on About.** I wanted it
+  reachable from anywhere on the site, not only from one page.
+- **Styled like a text-message thread,** but kept to my site's black, white
+  and grey: my messages in black on the right, the AI in light grey on the left.
+- **My own photo as the avatar,** cropped wide enough to show my neck and
+  collar rather than just my face.
+- **Rounded corners and a shadow on the panel,** even though the rest of the
+  site has neither. The chat is the only thing that floats above the page, so
+  it's the only thing that gets a shadow. On phones it goes full screen, square,
+  with no shadow.
+- **A project card and a short project page** so the work is described on the
+  portfolio itself, with a real screenshot of the chat as the cover rather than
+  an abstract graphic.
